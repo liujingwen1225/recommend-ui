@@ -32,8 +32,18 @@ const routes = [
       },
       {
         path: 'dashbord',
-        name: 'FrontHome',
+        name: 'Dashbord',
         component: () => import('../views/Dashbord.vue')
+      },
+      {
+        path: 'all-course',
+        name: 'AllCourse',
+        component: () => import('../views/front/AllCourse.vue')
+      },
+      {
+        path: 'my-course',
+        name: 'MyCourse',
+        component: () => import('../views/front/MyCourse.vue')
       },
       {
         path: 'person',

@@ -13,7 +13,8 @@
         <el-menu :default-active="'1'" class="el-menu-demo" mode="horizontal" router>
           <el-menu-item index="/front/home">首页</el-menu-item>
           <el-menu-item index="/front/dashbord">数据可视化</el-menu-item>
-          <!-- <el-menu-item index="/front/article">文章列表</el-menu-item> -->
+          <el-menu-item index="/front/all-course">全部课程</el-menu-item>
+          <el-menu-item index="/front/my-course">我的课程</el-menu-item>
         </el-menu>
       </div>
       <div style="width: 200px">
