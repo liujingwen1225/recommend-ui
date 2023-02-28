@@ -119,13 +119,13 @@
 </template>
 
 <script>
-import {serverIp} from "../../public/config";
+import {API_HOST} from "../config";
 
 export default {
   name: "User",
   data() {
     return {
-      serverIp: serverIp,
+      serverIp: API_HOST,
       tableData: [],
       total: 0,
       pageNum: 1,

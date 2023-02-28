@@ -23,18 +23,18 @@
     <el-table :data="tableData" border stripe :header-cell-class-name="'headerBg'"
               @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
-      <el-table-column label="课程名称" align="center" prop="name" show-overflow-tooltip="true"/>
-      <el-table-column label="课程学校" align="center" prop="school" show-overflow-tooltip="true"/>
-      <el-table-column label="授课老师" align="center" prop="instructor" show-overflow-tooltip="true"/>
-      <el-table-column label="课程类型" align="center" prop="type" show-overflow-tooltip="true"/>
-      <el-table-column label="参加人数" align="center" prop="participantsNumber" show-overflow-tooltip="true"/>
-      <el-table-column label="课程标签" align="center" prop="labels" show-overflow-tooltip="true"/>
-      <el-table-column label="课程状态" align="center" prop="status" show-overflow-tooltip="true"/>
-      <el-table-column label="课程评分" align="center" prop="grading" show-overflow-tooltip="true"/>
-      <el-table-column label="开课时间" align="center" prop="startTime" show-overflow-tooltip="true"/>
-      <el-table-column label="结课时间" align="center" prop="endTime" show-overflow-tooltip="true"/>
-      <el-table-column label="课程链接" align="center" prop="link" show-overflow-tooltip="true"/>
-      <el-table-column label="封面图" align="center" prop="coverImageUrl" show-overflow-tooltip="true"/>
+      <el-table-column label="课程名称" align="center" prop="name" :show-overflow-tooltip="true"/>
+      <el-table-column label="课程学校" align="center" prop="school" :show-overflow-tooltip="true"/>
+      <el-table-column label="授课老师" align="center" prop="instructor" :show-overflow-tooltip="true"/>
+      <el-table-column label="课程类型" align="center" prop="type" :show-overflow-tooltip="true"/>
+      <el-table-column label="参加人数" align="center" prop="participantsNumber" :show-overflow-tooltip="true"/>
+      <el-table-column label="课程标签" align="center" prop="labels" :show-overflow-tooltip="true"/>
+      <el-table-column label="课程状态" align="center" prop="status" :show-overflow-tooltip="true"/>
+      <el-table-column label="课程评分" align="center" prop="grading" :show-overflow-tooltip="true"/>
+      <el-table-column label="开课时间" align="center" prop="startTime" :show-overflow-tooltip="true"/>
+      <el-table-column label="结课时间" align="center" prop="endTime" :show-overflow-tooltip="true"/>
+      <el-table-column label="课程链接" align="center" prop="link" :show-overflow-tooltip="true"/>
+      <el-table-column label="封面图" align="center" prop="coverImageUrl" :show-overflow-tooltip="true"/>
       <el-table-column label="操作" width="280" align="center">
         <template slot-scope="scope">
           <el-button type="primary" @click="selectCourse(scope.row.id)">选课</el-button>

@@ -34,13 +34,13 @@
 </template>
 
 <script>
-import {serverIp} from "../../../public/config";
+import {API_HOST} from "../../config";
 
 export default {
   name: "Person",
   data() {
     return {
-      serverIp: serverIp,
+      serverIp: API_HOST,
       form: {},
       user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
     }
