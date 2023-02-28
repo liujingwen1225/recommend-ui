@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row :gutter="10" style="margin-bottom: 60px">
+    <el-row :gutter="10" style="margin: 20px 0 60px">
       <el-col :span="6">
         <el-card style="color: #409EFF">
           <div><i class="el-icon-user-solid" /> 用户总数</div>

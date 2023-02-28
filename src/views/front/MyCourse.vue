@@ -1,6 +1,5 @@
 <template>
   <div>
-    
     <div style="margin: 20px 0">
       <el-row :gutter="10">
         <el-col
@@ -10,10 +9,12 @@
           style="margin-bottom: 10px"
         >
           <div style="border: 1px solid #ccc; padding-bottom: 10px">
-            <img :src="item.coverImageUrl" alt="" style="width: 100%" />
+            <img :src="item.coverImageUrl" alt="" style="width: 100%;min-height: 200px;" />
             <div style="color: #666; padding: 10px">{{ item.name }}</div>
             <div style="padding: 10px">
-              <el-button type="primary" @click="fnCannel(item.id)">取消</el-button>
+              <el-button type="primary" @click="fnCannel(item.id, item.name)"
+                >取消</el-button
+              >
             </div>
           </div>
         </el-col>
@@ -27,12 +28,13 @@ export default {
   name: "MyCourse",
   data() {
     return {
-      dialogVisible: false,
+      user: localStorage.getItem("user")
+        ? JSON.parse(localStorage.getItem("user"))
+        : {},
       files: [],
     };
   },
   created() {
-    this.dialogVisible = true;
     this.request
       .get("/course/page", {
         params: {
@@ -47,10 +49,18 @@ export default {
       });
   },
   methods: {
-    fnCannel(id) {
-      this.$confirm("确认关闭？" + id)
+    fnCannel(courseId, name) {
+      this.$confirm(`确认要取消 ${name} 课程？`)
         .then((_) => {
-          console.log('ok')
+          this.request
+            .post("/course/studentCourse/" + courseId + "/" + this.user.id)
+            .then((res) => {
+              if (res.code === "200") {
+                this.$message.success("取消成功");
+              } else {
+                this.$message.success(res.msg);
+              }
+            });
         })
         .catch((_) => {});
     },

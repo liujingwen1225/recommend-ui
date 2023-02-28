@@ -42,10 +42,12 @@
           style="margin-bottom: 10px"
         >
           <div style="border: 1px solid #ccc; padding-bottom: 10px">
-            <img :src="item.coverImageUrl" alt="" style="width: 100%" />
+            <img :src="item.coverImageUrl" alt="" style="width: 100%;min-height: 200px;" />
             <div style="color: #666; padding: 10px">{{ item.name }}</div>
             <div style="padding: 10px">
-              <el-button type="primary">选课</el-button>
+              <el-button type="primary" @click="selectCourse(item.id)"
+                >选课</el-button
+              >
             </div>
           </div>
         </el-col>
@@ -60,7 +62,10 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      value: null,
+      user: localStorage.getItem("user")
+        ? JSON.parse(localStorage.getItem("user"))
+        : {},
+      value: "选项1",
       options: [
         {
           value: "选项1",
@@ -108,6 +113,17 @@ export default {
           done();
         })
         .catch((_) => {});
+    },
+    selectCourse(courseId) {
+      this.request
+        .post("/course/studentCourse/" + courseId + "/" + this.user.id)
+        .then((res) => {
+          if (res.code === "200") {
+            this.$message.success("选课成功");
+          } else {
+            this.$message.success(res.msg);
+          }
+        });
     },
   },
 };

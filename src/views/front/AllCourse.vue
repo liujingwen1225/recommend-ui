@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="margin: 10px 0">
+    <div style="margin: 20px 0">
       <el-form ref="form" :model="search" label-width="80px">
         <el-row :gutter="10">
           <el-col :span="6">
@@ -199,8 +199,7 @@ export default {
           params: {
             pageNum: this.pageNum,
             pageSize: this.pageSize,
-            name: "",
-            // ...this.search,
+            ...this.search,
           },
         })
         .then((res) => {
