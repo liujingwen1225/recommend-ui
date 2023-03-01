@@ -36,11 +36,15 @@
         <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item label="课程类型">
-              <el-input
-                clearable
-                v-model="search.type"
-                autocomplete="off"
-              ></el-input>
+              <el-select v-model="search.type" placeholder="请选择">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -86,20 +90,18 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="课程链接" align="center" prop="link" width="70">
-        <template slot-scope="scope">
-          <el-link :href="scope.row.link" target="_blank" type="primary"
-            >链接</el-link
-          >
-        </template>
-      </el-table-column>
-
       <el-table-column
         label="课程名称"
         align="center"
         prop="name"
         :show-overflow-tooltip="true"
-      />
+      >
+        <template slot-scope="scope">
+          <el-link :href="scope.row.link" target="_blank" type="primary">{{
+            scope.row.name
+          }}</el-link>
+        </template>
+      </el-table-column>
       <el-table-column
         label="课程学校"
         align="center"
@@ -161,9 +163,9 @@
 
       <el-table-column label="操作" width="280" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" @click="selectCourse(scope.row.id)"
+          <!-- <el-button type="primary" @click="selectCourse(scope.row.id)"
             >选课</el-button
-          >
+          > -->
           <el-button
             type="success"
             @click="handleEdit(scope.row)"
@@ -275,12 +277,34 @@ export default {
         school: null,
         instructor: null,
       },
+      options: [
+        {
+          value: "1",
+          label: "大数据与人工智能",
+        },
+      ],
     };
   },
   created() {
+    this.courseTypeList();
     this.load();
   },
   methods: {
+    // 课程类型列表
+    courseTypeList() {
+      this.request
+        .get("/course/courseTypeList", {
+          params: {},
+        })
+        .then((res) => {
+          if (res.data) {
+            this.options = res.data.map((item) => ({
+              value: item.type,
+              label: item.type,
+            }));
+          }
+        });
+    },
     selectCourse(courseId) {
       this.request
         .post("/course/studentCourse/" + courseId + "/" + this.user.id)
@@ -298,8 +322,7 @@ export default {
           params: {
             pageNum: this.pageNum,
             pageSize: this.pageSize,
-            name: "",
-            // ...this.search,
+            ...this.search,
           },
         })
         .then((res) => {

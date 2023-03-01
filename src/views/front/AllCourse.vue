@@ -5,7 +5,11 @@
         <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item label="课程名称">
-              <el-input v-model="search.name" autocomplete="off"></el-input>
+              <el-input
+                clearable
+                v-model="search.name"
+                autocomplete="off"
+              ></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -36,11 +40,15 @@
         <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item label="课程类型">
-              <el-input
-                clearable
-                v-model="search.type"
-                autocomplete="off"
-              ></el-input>
+              <el-select v-model="search.type" placeholder="请选择">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -136,8 +144,17 @@
 
       <el-table-column label="操作" width="80" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" @click="selectCourse(scope.row.id)"
+          <el-button
+            v-show="scope.row.courseStatus == 1"
+            type="primary"
+            @click="selectCourse(scope.row)"
             >选课</el-button
+          >
+          <el-button
+            v-show="scope.row.courseStatus == 2"
+            type="warning"
+            @click="cancelCourse(scope.row)"
+            >退选</el-button
           >
         </template>
       </el-table-column>
@@ -176,20 +193,63 @@ export default {
         school: null,
         instructor: null,
       },
+      options: [
+        {
+          value: "1",
+          label: "大数据与人工智能",
+        },
+      ],
     };
   },
   created() {
+    this.courseTypeList();
     this.load();
   },
   methods: {
-    selectCourse(courseId) {
+    // 选择课程
+    selectCourse({ id, name }) {
+      this.$confirm(`确认要选择 《${name}》 课程？`)
+        .then((_) => {
+          this.request
+            .post("/course/studentCourse/" + id + "/" + this.user.id)
+            .then((res) => {
+              if (res.code === "200") {
+                this.$message.success("选课成功");
+              } else {
+                this.$message.success(res.msg);
+              }
+            });
+        })
+        .catch((_) => {});
+    },
+    // 取消课程
+    cancelCourse({ id, name }) {
+      this.$confirm(`确认要取消 《${name}》 课程？`)
+        .then((_) => {
+          this.request
+            .post("/course/cancelCourseSelection/" + id + "/" + this.user.id)
+            .then((res) => {
+              if (res.code === "200") {
+                this.$message.success("已取消");
+              } else {
+                this.$message.success(res.msg);
+              }
+            });
+        })
+        .catch((_) => {});
+    },
+    // 课程类型列表
+    courseTypeList() {
       this.request
-        .post("/course/studentCourse/" + courseId + "/" + this.user.id)
+        .get("/course/courseTypeList", {
+          params: {},
+        })
         .then((res) => {
-          if (res.code === "200") {
-            this.$message.success("选课成功");
-          } else {
-            this.$message.success(res.msg);
+          if (res.data) {
+            this.options = res.data.map((item) => ({
+              value: item.type,
+              label: item.type,
+            }));
           }
         });
     },

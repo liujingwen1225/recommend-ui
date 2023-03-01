@@ -1,16 +1,32 @@
 <template>
   <div>
-<!--    头部-->
-    <div style="display: flex; height: 60px; line-height: 60px; border-bottom: 1px solid #eee">
+    <!--    头部-->
+    <div
+      style="
+        display: flex;
+        height: 60px;
+        line-height: 60px;
+        border-bottom: 1px solid #eee;
+      "
+    >
       <div style="width: 300px; display: flex; padding-left: 30px">
         <div style="width: 60px">
-          <img src="../../assets/logo.png" alt="" style="width: 50px; position: relative; top: 5px; right: 0">
+          <img
+            src="../../assets/logo.png"
+            alt=""
+            style="width: 50px; position: relative; top: 5px; right: 0"
+          />
         </div>
-        <div style="flex: 1">欢迎来到课程推荐系统</div>
+        <div style="flex: 1; font-weight: 600">欢迎来到课程推荐系统</div>
       </div>
       <div style="flex: 1">
-<!--        导航菜单-->
-        <el-menu :default-active="'1'" class="el-menu-demo" mode="horizontal" router>
+        <!--        导航菜单-->
+        <el-menu
+          :default-active="'1'"
+          class="el-menu-demo"
+          mode="horizontal"
+          router
+        >
           <el-menu-item index="/front/home">首页</el-menu-item>
           <el-menu-item index="/front/dashbord">数据可视化</el-menu-item>
           <el-menu-item index="/front/all-course">全部课程</el-menu-item>
@@ -18,18 +34,34 @@
         </el-menu>
       </div>
       <div style="width: 200px">
-        <div v-if="!user.username" style="text-align: right; padding-right: 30px">
+        <div
+          v-if="!user.username"
+          style="text-align: right; padding-right: 30px"
+        >
           <el-button @click="$router.push('/login')">登录</el-button>
           <el-button @click="$router.push('/register')">注册</el-button>
         </div>
         <div v-else>
           <el-dropdown style="width: 150px; cursor: pointer; text-align: right">
             <div style="display: inline-block">
-              <img :src="user.avatarUrl" alt=""
-                   style="width: 30px; border-radius: 50%; position: relative; top: 10px; right: 5px">
-              <span>{{ user.nickname }}</span><i class="el-icon-arrow-down" style="margin-left: 5px"></i>
+              <img
+                :src="user.avatarUrl"
+                alt=""
+                style="
+                  width: 30px;
+                  border-radius: 50%;
+                  position: relative;
+                  top: 10px;
+                  right: 5px;
+                "
+              />
+              <span>{{ user.nickname }}</span
+              ><i class="el-icon-arrow-down" style="margin-left: 5px"></i>
             </div>
-            <el-dropdown-menu slot="dropdown" style="width: 100px; text-align: center">
+            <el-dropdown-menu
+              slot="dropdown"
+              style="width: 100px; text-align: center"
+            >
               <el-dropdown-item style="font-size: 14px; padding: 5px 0">
                 <router-link to="/front/password">修改密码</router-link>
               </el-dropdown-item>
@@ -56,33 +88,33 @@ export default {
   name: "Front",
   data() {
     return {
-      user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
-    }
+      user: localStorage.getItem("user")
+        ? JSON.parse(localStorage.getItem("user"))
+        : {},
+    };
   },
-  created() {
-
-  },
+  created() {},
   methods: {
     logout() {
-      this.$store.commit("logout")
-      this.$message.success("退出成功")
-    }
-  }
-}
+      this.$store.commit("logout");
+      this.$message.success("退出成功");
+    },
+  },
+};
 </script>
 
 <style>
-.item{
+.item {
   display: inline-block;
   width: 100px;
 
   text-align: center;
-  cursor: pointer
+  cursor: pointer;
 }
 .item a {
-  color: 	#1E90FF;
+  color: #1e90ff;
 }
-.item:hover{
-  background-color: 	LightPink;
+.item:hover {
+  background-color: LightPink;
 }
 </style>

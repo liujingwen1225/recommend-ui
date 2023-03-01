@@ -9,16 +9,43 @@
           style="margin-bottom: 10px"
         >
           <div style="border: 1px solid #ccc; padding-bottom: 10px">
-            <img :src="item.coverImageUrl" alt="" style="width: 100%;min-height: 200px;" />
-            <div style="color: #666; padding: 10px">{{ item.name }}</div>
+            <img
+              :src="item.coverImageUrl"
+              alt=""
+              style="width: 100%; min-height: 200px"
+            />
+            <div
+              style="
+                color: #666;
+                padding: 10px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+              "
+            >
+              {{ item.name }}
+            </div>
             <div style="padding: 10px">
-              <el-button type="primary" @click="fnCannel(item.id, item.name)"
-                >取消</el-button
+              <el-button type="primary" @click="cancelCourse(item)"
+                >退选</el-button
               >
             </div>
           </div>
         </el-col>
       </el-row>
+
+      <div style="padding: 10px 0">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageNum"
+          :page-sizes="[12, 24, 48, 64]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+        >
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -31,32 +58,46 @@ export default {
       user: localStorage.getItem("user")
         ? JSON.parse(localStorage.getItem("user"))
         : {},
+      pageNum: 1,
+      pageSize: 12,
+      total: 0,
       files: [],
     };
   },
   created() {
-    this.request
-      .get("/course/page", {
-        params: {
-          pageNum: 1,
-          pageSize: 12,
-          name: "",
-        },
-      })
-      .then((res) => {
-        console.log(res.data.records);
-        this.files = res.data.records;
-      });
+    this.load();
   },
   methods: {
-    fnCannel(courseId, name) {
-      this.$confirm(`确认要取消 ${name} 课程？`)
+    load() {
+      this.request
+        .get("/course/myCourseList", {
+          params: {
+            pageNum: this.pageNum,
+            pageSize: this.pageSize,
+          },
+        })
+        .then((res) => {
+          this.files = res.data.records;
+          this.total = res.data.total;
+        });
+    },
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      this.load();
+    },
+    handleCurrentChange(pageNum) {
+      this.pageNum = pageNum;
+      this.load();
+    },
+    // 取消课程
+    cancelCourse({ id, name }) {
+      this.$confirm(`确认要取消 《${name}》 课程？`)
         .then((_) => {
           this.request
-            .post("/course/studentCourse/" + courseId + "/" + this.user.id)
+            .post("/course/cancelCourseSelection/" + id + "/" + this.user.id)
             .then((res) => {
               if (res.code === "200") {
-                this.$message.success("取消成功");
+                this.$message.success("已取消");
               } else {
                 this.$message.success(res.msg);
               }
