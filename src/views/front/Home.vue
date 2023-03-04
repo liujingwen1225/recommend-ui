@@ -120,12 +120,18 @@ export default {
     };
   },
   created() {
-    // 新用户弹出
-    if (this.user.userType == 1) {
-      this.courseTypeList();
-    } else {
-      this.indexCourse();
-    }
+    this.request
+      .get("/course/userType", {
+        params: {},
+      })
+      .then((res) => {
+        // 新用户弹出
+        if (res.data && res.data.userType == "1") {
+          this.courseTypeList();
+        } else {
+          this.indexCourse();
+        }
+      });
   },
   methods: {
     // 课程类型列表

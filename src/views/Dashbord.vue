@@ -89,12 +89,12 @@ export default {
           res.data.popularCourseNumberList
         );
         //热门学校
-        this.fnHotCoutse(
+        this.fnHotSchool(
           res.data.popularSchoolNameList,
           res.data.popularSchoolNumberList
         );
         //热门老师
-        this.fnHotCoutse(
+        this.fnHotTeather(
           res.data.popularTeacherNameList,
           res.data.popularTeacherNumberList
         );
@@ -167,6 +167,11 @@ export default {
         xAxis: {
           type: "category",
           data: popularSchoolNameList,
+          axisLabel: {
+            // 设置字体的倾斜角度
+            interval: 0,
+            rotate: 30,
+          },
         },
         yAxis: {
           type: "value",
@@ -202,6 +207,11 @@ export default {
         color: "#8923f2",
         xAxis: {
           type: "category",
+          axisLabel: {
+            // 设置字体的倾斜角度
+            interval: 0,
+            rotate: 30,
+          },
           data: popularTeacherNameList,
         },
         yAxis: {
