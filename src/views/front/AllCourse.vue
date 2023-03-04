@@ -103,13 +103,6 @@
         :show-overflow-tooltip="true"
       />
       <el-table-column
-        label="参加人数"
-        align="center"
-        prop="participantsNumber"
-        :show-overflow-tooltip="true"
-        width="70"
-      />
-      <el-table-column
         label="课程标签"
         align="center"
         prop="labels"
@@ -126,6 +119,13 @@
         label="课程评分"
         align="center"
         prop="grading"
+        :show-overflow-tooltip="true"
+        width="70"
+      />
+      <el-table-column
+        label="参加人数"
+        align="center"
+        prop="participantsNumber"
         :show-overflow-tooltip="true"
         width="70"
       />
@@ -215,9 +215,17 @@ export default {
             .then((res) => {
               if (res.code === "200") {
                 this.load();
-                this.$message.success("选课成功");
+                this.$message.success({
+                  duration: 2000,
+                  showClose: true,
+                  message: "选课成功",
+                });
               } else {
-                this.$message.success(res.msg);
+                this.$message.success({
+                  duration: 2000,
+                  showClose: true,
+                  message: res.msg,
+                });
               }
             });
         })
@@ -232,9 +240,17 @@ export default {
             .then((res) => {
               if (res.code === "200") {
                 this.load();
-                this.$message.success("已取消");
+                this.$message.success({
+                  duration: 2000,
+                  showClose: true,
+                  message: "已取消",
+                });
               } else {
-                this.$message.success(res.msg);
+                this.$message.success({
+                  duration: 2000,
+                  showClose: true,
+                  message: res.msg,
+                });
               }
             });
         })

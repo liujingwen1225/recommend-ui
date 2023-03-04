@@ -73,7 +73,11 @@ export default {
     save() {
       this.request.post("/user", this.form).then((res) => {
         if (res.code === "200") {
-          this.$message.success("保存成功");
+          this.$message.error({
+            duration: 2000,
+            showClose: true,
+            message: "保存成功",
+          });
 
           // 触发父级更新User的方法
           this.$emit("refreshUser");
@@ -84,7 +88,11 @@ export default {
             localStorage.setItem("user", JSON.stringify(res));
           });
         } else {
-          this.$message.error("保存失败");
+          this.$message.error({
+            duration: 2000,
+            showClose: true,
+            message: "保存失败",
+          });
         }
       });
     },

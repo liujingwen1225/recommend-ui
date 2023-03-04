@@ -153,7 +153,11 @@ export default {
     // 确认课程类型
     saveCourseType() {
       if (this.value.length <= 0) {
-        this.$message.warning("请选择课程类型！");
+        this.$message.warning({
+          duration: 2000,
+          showClose: true,
+          message: "请选择课程类型！",
+        });
         return;
       }
       this.$confirm("确认选择？")
@@ -167,11 +171,19 @@ export default {
                 this.dialogVisible = false;
                 this.indexCourse();
               } else {
-                this.$message.success(res.msg);
+                this.$message.success({
+                  duration: 2000,
+                  showClose: true,
+                  message: res.msg,
+                });
               }
             })
             .catch((e) => {
-              this.$message.error("出错了");
+              this.$message.error({
+                duration: 2000,
+                showClose: true,
+                message: "出错了",
+              });
             });
         })
         .catch((_) => {});
@@ -214,9 +226,17 @@ export default {
             .then((res) => {
               if (res.code === "200") {
                 this.indexCourse();
-                this.$message.success("选课成功");
+                this.$message.success({
+                  duration: 2000,
+                  showClose: true,
+                  message: "选课成功",
+                });
               } else {
-                this.$message.success(res.msg);
+                this.$message.success({
+                  duration: 2000,
+                  showClose: true,
+                  message: res.msg,
+                });
               }
             });
         })
@@ -231,9 +251,17 @@ export default {
             .then((res) => {
               if (res.code === "200") {
                 this.indexCourse();
-                this.$message.success("已取消");
+                this.$message.success({
+                  duration: 2000,
+                  showClose: true,
+                  message: "已取消",
+                });
               } else {
-                this.$message.success(res.msg);
+                this.$message.success({
+                  duration: 2000,
+                  showClose: true,
+                  message: res.msg,
+                });
               }
             });
         })

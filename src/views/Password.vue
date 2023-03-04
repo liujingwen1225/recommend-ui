@@ -72,15 +72,27 @@ export default {
       this.$refs.pass.validate((valid) => {
         if (valid) {
           if (this.form.newPassword !== this.form.confirmPassword) {
-            this.$message.error("2次输入的新密码不相同");
+            this.$message.error({
+              duration: 2000,
+              showClose: true,
+              message: "2次输入的新密码不相同",
+            });
             return false;
           }
           this.request.post("/user/password", this.form).then((res) => {
             if (res.code === "200") {
-              this.$message.success("修改成功");
+              this.$message.success({
+                duration: 2000,
+                showClose: true,
+                message: "修改成功",
+              });
               this.$store.commit("logout");
             } else {
-              this.$message.error(res.msg);
+              this.$message.error({
+                duration: 2000,
+                showClose: true,
+                message: res.msg,
+              });
             }
           });
         }

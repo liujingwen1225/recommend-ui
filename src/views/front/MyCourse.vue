@@ -105,10 +105,18 @@ export default {
             .post("/course/cancelCourseSelection/" + id + "/" + this.user.id)
             .then((res) => {
               if (res.code === "200") {
-                this.$message.success("已取消");
+                this.$message.success({
+                  duration: 2000,
+                  showClose: true,
+                  message: "已取消",
+                });
                 this.load();
               } else {
-                this.$message.success(res.msg);
+                this.$message.success({
+                  duration: 2000,
+                  showClose: true,
+                  message: res.msg,
+                });
               }
             });
         })

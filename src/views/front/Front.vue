@@ -22,7 +22,7 @@
       <div style="flex: 1">
         <!--        导航菜单-->
         <el-menu
-          default-active="/front/home"
+          :default-active="activeIndex"
           class="el-menu-demo"
           mode="horizontal"
           router
@@ -88,16 +88,23 @@ export default {
   name: "Front",
   data() {
     return {
+      activeIndex: "/front/home",
       user: localStorage.getItem("user")
         ? JSON.parse(localStorage.getItem("user"))
         : {},
     };
   },
-  created() {},
+  created() {
+    this.activeIndex = location.pathname;
+  },
   methods: {
     logout() {
       this.$store.commit("logout");
-      this.$message.success("退出成功");
+      this.$message.success({
+        duration: 2000,
+        showClose: true,
+        message: "退出成功",
+      });
     },
   },
 };

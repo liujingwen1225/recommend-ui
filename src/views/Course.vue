@@ -310,9 +310,17 @@ export default {
         .post("/course/studentCourse/" + courseId + "/" + this.user.id)
         .then((res) => {
           if (res.code === "200") {
-            this.$message.success("选课成功");
+            this.$message.success({
+              duration: 2000,
+              showClose: true,
+              message: "选课成功",
+            });
           } else {
-            this.$message.success(res.msg);
+            this.$message.success({
+              duration: 2000,
+              showClose: true,
+              message: res.msg,
+            });
           }
         });
     },
@@ -337,7 +345,11 @@ export default {
     changeEnable(row) {
       this.request.post("/course/update", row).then((res) => {
         if (res.code === "200") {
-          this.$message.success("操作成功");
+          this.$message.success({
+            duration: 2000,
+            showClose: true,
+            message: "操作成功",
+          });
         }
       });
     },
@@ -352,10 +364,18 @@ export default {
     del(id) {
       this.request.delete("/course/" + id).then((res) => {
         if (res.code === "200") {
-          this.$message.success("删除成功");
+          this.$message.success({
+            duration: 2000,
+            showClose: true,
+            message: "删除成功",
+          });
           this.load();
         } else {
-          this.$message.error("删除失败");
+          this.$message.error({
+            duration: 2000,
+            showClose: true,
+            message: "删除失败",
+          });
         }
       });
     },
@@ -367,21 +387,37 @@ export default {
       let ids = this.multipleSelection.map((v) => v.id); // [{}, {}, {}] => [1,2,3]
       this.request.post("/course/del/batch", ids).then((res) => {
         if (res.code === "200") {
-          this.$message.success("批量删除成功");
+          this.$message.success({
+            duration: 2000,
+            showClose: true,
+            message: "批量删除成功",
+          });
           this.load();
         } else {
-          this.$message.error("批量删除失败");
+          this.$message.error({
+            duration: 2000,
+            showClose: true,
+            message: "批量删除失败",
+          });
         }
       });
     },
     save() {
       this.request.post("/course", this.form).then((res) => {
         if (res.code === "200") {
-          this.$message.success("保存成功");
+          this.$message.error({
+            duration: 2000,
+            showClose: true,
+            message: "保存成功",
+          });
           this.dialogFormVisible = false;
           this.load();
         } else {
-          this.$message.error("保存失败");
+          this.$message.error({
+            duration: 2000,
+            showClose: true,
+            message: "保存失败",
+          });
         }
       });
     },
