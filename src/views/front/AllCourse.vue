@@ -33,7 +33,7 @@
           <el-col :span="6">
             <el-form-item>
               <el-button type="primary" @click="load">搜索</el-button>
-              <el-button type="warning" @click="reset">重置</el-button>
+              <el-button type="defalut" @click="reset">重置</el-button>
             </el-form-item>
           </el-col>
         </el-row>
@@ -145,13 +145,13 @@
       <el-table-column label="操作" width="80" align="center">
         <template slot-scope="scope">
           <el-button
-            v-show="scope.row.courseStatus == 1"
+            v-if="scope.row.courseStatus == 1"
             type="primary"
             @click="selectCourse(scope.row)"
             >选课</el-button
           >
           <el-button
-            v-show="scope.row.courseStatus == 2"
+            v-if="scope.row.courseStatus == 2"
             type="warning"
             @click="cancelCourse(scope.row)"
             >退选</el-button
@@ -214,6 +214,7 @@ export default {
             .post("/course/studentCourse/" + id + "/" + this.user.id)
             .then((res) => {
               if (res.code === "200") {
+                this.load();
                 this.$message.success("选课成功");
               } else {
                 this.$message.success(res.msg);
@@ -230,6 +231,7 @@ export default {
             .post("/course/cancelCourseSelection/" + id + "/" + this.user.id)
             .then((res) => {
               if (res.code === "200") {
+                this.load();
                 this.$message.success("已取消");
               } else {
                 this.$message.success(res.msg);

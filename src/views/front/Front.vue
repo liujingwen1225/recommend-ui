@@ -22,7 +22,7 @@
       <div style="flex: 1">
         <!--        导航菜单-->
         <el-menu
-          :default-active="'1'"
+          default-active="/front/home"
           class="el-menu-demo"
           mode="horizontal"
           router

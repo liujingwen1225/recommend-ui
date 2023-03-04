@@ -3,33 +3,33 @@
     <el-row :gutter="10" style="margin: 20px 0 60px">
       <el-col :span="6">
         <el-card style="color: #409eff">
-          <div><i class="el-icon-user-solid" /> 今年选课用户</div>
+          <div><i class="el-icon-user" /> 今年选课用户</div>
           <div style="padding: 10px 0; text-align: center; font-weight: bold">
-            5839
+            {{ userNumber }}
           </div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card style="color: #f56c6c">
-          <div><i class="el-icon-money" /> 课程数量</div>
+          <div><i class="el-icon-reading" /> 课程数量</div>
           <div style="padding: 10px 0; text-align: center; font-weight: bold">
-            923
+            {{ courseNumber }}
           </div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card style="color: #67c23a">
-          <div><i class="el-icon-bank-card" /> 授课教师数量</div>
+          <div><i class="el-icon-data-line" /> 授课教师数量</div>
           <div style="padding: 10px 0; text-align: center; font-weight: bold">
-            82
+            {{ teacherNumber }}
           </div>
         </el-card>
       </el-col>
       <el-col :span="6">
         <el-card style="color: #e6a23c">
-          <div><i class="el-icon-s-shop" /> 授课学校数量</div>
+          <div><i class="el-icon-office-building" /> 授课学校数量</div>
           <div style="padding: 10px 0; text-align: center; font-weight: bold">
-            382
+            {{ schoolNumber }}
           </div>
         </el-card>
       </el-col>
@@ -57,164 +57,55 @@ import * as echarts from "echarts";
 export default {
   name: "Home",
   data() {
-    return {};
+    return {
+      // "今年选课用户")
+      userNumber: 0,
+      // "课程数量")
+      courseNumber: 0,
+      //"授课教师数量")
+      teacherNumber: 0,
+      //"授课学校数量")
+      schoolNumber: 0,
+    };
   },
   mounted() {
     // 页面元素渲染之后再触发
-    var option = {
-      title: {
-        text: "各季度会员数量统计",
-        subtext: "趋势图",
-        left: "center",
-      },
-      tooltip: {
-        trigger: "item",
-      },
-      legend: {
-        orient: "vertical",
-        left: "left",
-      },
-      xAxis: {
-        type: "category",
-        data: ["第一季度", "第二季度", "第三季度", "第四季度"],
-      },
-      yAxis: {
-        type: "value",
-      },
-      series: [
-        {
-          name: "星巴克",
-          data: [],
-          type: "bar",
-        },
-        {
-          name: "星巴克",
-          data: [],
-          type: "line",
-        },
-        {
-          name: "瑞幸咖啡",
-          data: [],
-          type: "bar",
-        },
-        {
-          name: "瑞幸咖啡",
-          data: [],
-          type: "line",
-        },
-      ],
-    };
-
-    // 饼图
-
-    var pieOption = {
-      title: {
-        text: "各季度会员数量统计",
-        subtext: "比例图",
-        left: "center",
-      },
-      tooltip: {
-        trigger: "item",
-        formatter: "{a} <br/>{b} : {c} ({d}%)",
-      },
-      legend: {
-        orient: "vertical",
-        left: "left",
-      },
-      series: [
-        {
-          name: "星巴克",
-          type: "pie",
-          radius: "55%",
-          center: ["25%", "70%"],
-          label: {
-            //饼图图形上的文本标签
-            normal: {
-              show: true,
-              position: "inner", //标签的位置
-              textStyle: {
-                fontWeight: 300,
-                fontSize: 14, //文字的字体大小
-                color: "#fff",
-              },
-              formatter: "{c}({d}%)",
-            },
-          },
-          data: [], // 填空
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: "rgba(0, 0, 0, 0.5)",
-            },
-          },
-        },
-        {
-          name: "瑞幸咖啡",
-          type: "pie",
-          radius: "50%",
-          center: ["75%", "50%"],
-          label: {
-            //饼图图形上的文本标签
-            normal: {
-              show: true,
-              position: "inner", //标签的位置
-              textStyle: {
-                fontWeight: 300,
-                fontSize: 14, //文字的字体大小
-                color: "#fff",
-              },
-              formatter: "{d}%",
-            },
-          },
-          data: [
-            { name: "第一季度", value: 5 },
-            { name: "第二季度", value: 6 },
-            { name: "第三季度", value: 7 },
-            { name: "第四季度", value: 8 },
-          ], // 填空
-          emphasis: {
-            itemStyle: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: "rgba(0, 0, 0, 0.5)",
-            },
-          },
-        },
-      ],
-    };
-
-    // var chartDom = document.getElementById("hotTeather");
-    // var myChart = echarts.init(chartDom);
-
-    // var pieDom = document.getElementById('pie');
-    // var pieChart = echarts.init(pieDom);
-
-    // this.request.get("/echarts/members").then(res => {
-    //   // 填空
-    //   // option.xAxis.data = res.data.x
-    // option.series[0].data = res.data
-    // option.series[1].data = res.data
-
-    // option.series[2].data = [5, 6, 7, 8];
-    // option.series[3].data = [5, 6, 7, 8];
-    //   // 数据准备完毕之后再set
-    // myChart.setOption(option);
-
-    //   pieOption.series[0].data = [
-    //     {name: "第一季度", value: res.data[0]},
-    //     {name: "第二季度", value: res.data[1]},
-    //     {name: "第三季度", value: res.data[2]},
-    //     {name: "第四季度", value: res.data[3]},
-    //   ]
-    //   pieChart.setOption(pieOption)
-    // })
-    this.fnHotCoutse();
-    this.fnHotSchool();
-    this.fnHotTeather();
+    this.fnChartData();
   },
   methods: {
-    fnHotCoutse() {
+    fnChartData() {
+      this.request.get("/echarts/chartData").then((res) => {
+        // "今年选课用户")
+        this.userNumber = res.data.userNumber;
+        // "课程数量")
+        this.courseNumber = res.data.courseNumber;
+        //"授课教师数量")
+        this.teacherNumber = res.data.teacherNumber;
+        //"授课学校数量")
+        this.schoolNumber = res.data.schoolNumber;
+        //热门课程
+        this.fnHotCoutse(
+          res.data.popularCourseNameList,
+          res.data.popularCourseNumberList
+        );
+        //热门学校
+        this.fnHotCoutse(
+          res.data.popularSchoolNameList,
+          res.data.popularSchoolNumberList
+        );
+        //热门老师
+        this.fnHotCoutse(
+          res.data.popularTeacherNameList,
+          res.data.popularTeacherNumberList
+        );
+      });
+    },
+    /**
+     * 热门课程
+     * @param {*} popularCourseNameList 名称数组
+     * @param {*} popularCourseNumberList 人数数组
+     */
+    fnHotCoutse(popularCourseNameList, popularCourseNumberList) {
       const hotCoutse = document.getElementById("hotCoutse");
       const hotCoutseChart = echarts.init(hotCoutse);
       let hotCoutseOption = {
@@ -241,19 +132,24 @@ export default {
         },
         yAxis: {
           type: "category",
-          data: ["中大", "案板", "USA", "India", "China", "World"],
+          data: popularCourseNameList,
         },
         color: "#8299f2",
         series: [
           {
             type: "bar",
-            data: [181203, 23489, 29034, 104970, 131744, 630230],
+            data: popularCourseNumberList,
           },
         ],
       };
       hotCoutseChart.setOption(hotCoutseOption);
     },
-    fnHotSchool() {
+    /**
+     * 热门学校
+     * @param {*} popularSchoolNameList 名称数组
+     * @param {*} popularSchoolNumberList 人数数组
+     */
+    fnHotSchool(popularSchoolNameList, popularSchoolNumberList) {
       const hotSchool = document.getElementById("hotSchool");
       const hotSchoolChart = echarts.init(hotSchool);
       let hotSchoolOption = {
@@ -270,21 +166,26 @@ export default {
         color: "#8ff9f2",
         xAxis: {
           type: "category",
-          data: ["电子", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          data: popularSchoolNameList,
         },
         yAxis: {
           type: "value",
         },
         series: [
           {
-            data: [120, 200, 150, 80, 70, 110, 130],
+            data: popularSchoolNumberList,
             type: "bar",
           },
         ],
       };
       hotSchoolChart.setOption(hotSchoolOption);
     },
-    fnHotTeather() {
+    /**
+     * 热门老师
+     * @param {*} popularTeacherNameList 名称数组
+     * @param {*} popularTeacherNumberList 人数数组
+     */
+    fnHotTeather(popularTeacherNameList, popularTeacherNumberList) {
       const hotTeather = document.getElementById("hotTeather");
       const hotTeatherChart = echarts.init(hotTeather);
       let hotTeatherOption = {
@@ -301,14 +202,14 @@ export default {
         color: "#8923f2",
         xAxis: {
           type: "category",
-          data: ["电子", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+          data: popularTeacherNameList,
         },
         yAxis: {
           type: "value",
         },
         series: [
           {
-            data: [120, 200, 150, 80, 70, 110, 130],
+            data: popularTeacherNumberList,
             type: "bar",
           },
         ],

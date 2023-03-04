@@ -205,7 +205,7 @@
       </el-pagination>
     </div>
 
-    <el-dialog title="课程信息" :visible.sync="dialogFormVisible" width="30%">
+    <el-dialog title="课程信息" :visible.sync="dialogFormVisible" width="40%">
       <el-form label-width="80px" size="small">
         <el-form-item label="课程名称">
           <el-input v-model="form.name" autocomplete="off"></el-input>

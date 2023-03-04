@@ -4,7 +4,9 @@
       title="提示"
       :visible.sync="dialogVisible"
       width="30%"
-      :before-close="handleClose"
+      :show-close="false"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
     >
       <div>
         <el-form ref="form" label-width="120px">
@@ -31,14 +33,13 @@
       </div>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="saveCourseType">确 定</el-button>
       </span>
     </el-dialog>
 
-    <div style="margin: 20px 0">
+    <CourseInfo ref="courseInfo"></CourseInfo>
+
+    <div style="margin: 20px 0" v-show="total != 0">
       <el-row :gutter="10">
         <el-col
           :span="6"
@@ -46,26 +47,31 @@
           :key="item.id"
           style="margin-bottom: 10px"
         >
-          <div style="border: 1px solid #ccc; padding-bottom: 10px">
+          <div class="card" @click.stop="courseInfo(item.id)">
             <img
               :src="item.coverImageUrl"
               alt=""
               style="width: 100%; min-height: 200px"
             />
-            <div
-              style="
-                color: #666;
-                padding: 10px;
-                text-overflow: ellipsis;
-                overflow: hidden;
-                white-space: nowrap;
-              "
-            >
+            <div class="card-name">
               {{ item.name }}
             </div>
+            <div class="card-info">
+              <div>课程评分：{{ item.grading }}</div>
+              <div>参与人数：{{ item.participantsNumber }}</div>
+            </div>
             <div style="padding: 10px">
-              <el-button type="primary" @click="selectCourse(item)"
+              <el-button
+                v-if="item.courseStatus == 1"
+                type="primary"
+                @click.stop="selectCourse(item)"
                 >选课</el-button
+              >
+              <el-button
+                v-if="item.courseStatus == 2"
+                type="warning"
+                @click.stop="cancelCourse(item)"
+                >退选</el-button
               >
             </div>
           </div>
@@ -73,7 +79,7 @@
       </el-row>
     </div>
 
-    <div style="padding: 10px 0">
+    <div style="padding: 10px 0" v-show="total != 0">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -89,18 +95,20 @@
 </template>
 
 <script>
+import CourseInfo from "../../components/CourseInfo.vue";
 export default {
   name: "FrontHome",
+  components: { CourseInfo },
   data() {
     return {
       dialogVisible: false,
       user: localStorage.getItem("user")
         ? JSON.parse(localStorage.getItem("user"))
         : {},
-      value: "",
+      value: [],
       options: [
         {
-          value: "1",
+          value: "大数据与人工智能",
           label: "大数据与人工智能",
         },
       ],
@@ -115,17 +123,11 @@ export default {
     // 新用户弹出
     if (this.user.userType == 1) {
       this.courseTypeList();
+    } else {
+      this.indexCourse();
     }
-    this.indexCourse();
   },
   methods: {
-    handleClose(done) {
-      this.$confirm("确认关闭？")
-        .then((_) => {
-          done();
-        })
-        .catch((_) => {});
-    },
     // 课程类型列表
     courseTypeList() {
       this.request
@@ -142,6 +144,32 @@ export default {
           }
         });
     },
+    // 确认课程类型
+    saveCourseType() {
+      if (this.value.length <= 0) {
+        this.$message.warning("请选择课程类型！");
+        return;
+      }
+      this.$confirm("确认选择？")
+        .then((_) => {
+          this.request
+            .post("/course/saveCourseType", {
+              typeList: this.value.join(","),
+            })
+            .then((res) => {
+              if (res.code === "200") {
+                this.dialogVisible = false;
+                this.indexCourse();
+              } else {
+                this.$message.success(res.msg);
+              }
+            })
+            .catch((e) => {
+              this.$message.error("出错了");
+            });
+        })
+        .catch((_) => {});
+    },
     // 首页课程列表
     indexCourse() {
       this.request
@@ -149,13 +177,19 @@ export default {
           params: {
             pageNum: this.pageNum,
             pageSize: this.pageSize,
-            typeList: "大数据与人工智能,程序设计与开发",
           },
         })
         .then((res) => {
           this.records = res.data;
           this.total = res.data.length;
         });
+    },
+    // 课程信息
+    courseInfo(id) {
+      this.request.get("/course/" + id).then((res) => {
+        this.$refs.courseInfo.form = res.data;
+        this.$refs.courseInfo.dialogFormVisible = true;
+      });
     },
     handleSizeChange(pageSize) {
       this.pageSize = pageSize;
@@ -173,6 +207,7 @@ export default {
             .post("/course/studentCourse/" + id + "/" + this.user.id)
             .then((res) => {
               if (res.code === "200") {
+                this.indexCourse();
                 this.$message.success("选课成功");
               } else {
                 this.$message.success(res.msg);
@@ -189,6 +224,7 @@ export default {
             .post("/course/cancelCourseSelection/" + id + "/" + this.user.id)
             .then((res) => {
               if (res.code === "200") {
+                this.indexCourse();
                 this.$message.success("已取消");
               } else {
                 this.$message.success(res.msg);
