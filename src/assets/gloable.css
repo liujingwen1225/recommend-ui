@@ -37,6 +37,7 @@ a {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  font-weight: 600;
 }
 .card-info {
   display: flex;
@@ -45,4 +46,8 @@ a {
   color: #666;
   padding: 0 10px;
   font-size: 14px;
+}
+
+.el-rate__icon {
+  font-size: 30px;
 }

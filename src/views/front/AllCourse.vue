@@ -55,6 +55,8 @@
       </el-form>
     </div>
 
+    <CourseInfo ref="courseInfo"></CourseInfo>
+
     <el-table
       :data="tableData"
       border
@@ -78,9 +80,9 @@
         prop="link"
       >
         <template slot-scope="scope">
-          <el-link :href="scope.row.link" target="_blank" type="primary">{{
+          <el-button type="text" @click="courseInfo(scope.row.id)">{{
             scope.row.name
-          }}</el-link>
+          }}</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -176,8 +178,10 @@
 </template>
 
 <script>
+import CourseInfo from "../../components/CourseInfo.vue";
 export default {
   name: "AllCourse",
+  components: { CourseInfo },
   data() {
     return {
       tableData: [],
@@ -270,6 +274,13 @@ export default {
             }));
           }
         });
+    },
+    // 课程信息
+    courseInfo(id) {
+      this.request.get("/course/" + id).then((res) => {
+        this.$refs.courseInfo.form = res.data;
+        this.$refs.courseInfo.dialogFormVisible = true;
+      });
     },
     load() {
       this.request
