@@ -75,6 +75,9 @@
         ></el-button>
       </el-popconfirm>
     </div>
+
+    <CourseInfo ref="courseInfo"></CourseInfo>
+
     <el-table
       :data="tableData"
       border
@@ -91,9 +94,9 @@
         :show-overflow-tooltip="true"
       >
         <template slot-scope="scope">
-          <el-link :href="scope.row.link" target="_blank" type="primary">{{
+          <el-button type="text" @click="courseInfo(scope.row.id)">{{
             scope.row.name
-          }}</el-link>
+          }}</el-button>
         </template>
       </el-table-column>
       <el-table-column
@@ -238,8 +241,10 @@
 </template>
 
 <script>
+import CourseInfo from "./../components/CourseInfo.vue";
 export default {
   name: "Course",
+  components: { CourseInfo },
   data() {
     return {
       form: {},
@@ -272,6 +277,13 @@ export default {
     this.load();
   },
   methods: {
+    // 课程信息
+    courseInfo(id) {
+      this.request.get("/course/" + id).then((res) => {
+        this.$refs.courseInfo.form = res.data;
+        this.$refs.courseInfo.dialogFormVisible = true;
+      });
+    },
     // 课程类型列表
     courseTypeList() {
       this.request
