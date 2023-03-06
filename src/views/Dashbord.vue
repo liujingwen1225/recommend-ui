@@ -69,7 +69,7 @@
     </el-row>
     <el-row>
       <el-col :span="12">
-        <div id="hotSchool" style="width: 100%; height: 450px"></div>
+        <div id="hotSchool" style="width: 105%; height: 450px"></div>
       </el-col>
 
       <el-col :span="12">
@@ -191,6 +191,14 @@ export default {
         xAxis: {
           type: "value",
           boundaryGap: [0, 0.01],
+          axisLabel:{
+            formatter: function (value,index){
+              if (value>1000){
+                value = value /1000 +'k';
+              }
+              return value;
+            }
+          }
         },
         yAxis: {
           type: "category",
@@ -235,6 +243,14 @@ export default {
         },
         yAxis: {
           type: "value",
+          axisLabel:{
+            formatter: function (value,index){
+              if (value>1000){
+                value = value /1000 +'k';
+              }
+              return value;
+            }
+          }
         },
         series: [
           {
@@ -274,6 +290,14 @@ export default {
         },
         yAxis: {
           type: "value",
+          axisLabel:{
+            formatter: function (value,index){
+              if (value>1000){
+                value = value /1000 +'k';
+              }
+              return value;
+            }
+          }
         },
         series: [
           {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog
-      title="提示"
+      title="请选择喜欢的课程类型"
       :visible.sync="dialogVisible"
       width="30%"
       :show-close="false"
@@ -12,7 +12,7 @@
         <el-form ref="form" label-width="120px">
           <el-row :gutter="10">
             <el-col :span="24">
-              <el-form-item label="请选择课程类型">
+              <el-form-item label="请选择">
                 <el-select
                   multiple
                   v-model="value"

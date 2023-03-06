@@ -49,9 +49,9 @@
                 justify-content: space-between;
               "
             >
-              <div v-if="item.rating != null">评分：{{ item.rating }}</div>
+              <div v-if="item.rating != '' ">我的评分：{{ item.rating }}</div>
               <el-button
-                v-if="item.rating == null"
+                v-if="item.rating == ''"
                 type="defalut"
                 @click.stop="fnRateOpen(item)"
                 >评分</el-button
@@ -178,7 +178,7 @@ export default {
       const { courseName, rating } = this.rate;
       this.$confirm(`确认给 《${courseName}》 课程评分为：${rating} 分？`)
         .then((_) => {
-          this.request.post("/course/saveRate", this.rate).then((res) => {
+          this.request.post("/course/myRating", this.rate).then((res) => {
             if (res.code === "200") {
               this.$message.success({
                 duration: 2000,

@@ -91,6 +91,7 @@
         label="课程名称"
         align="center"
         prop="name"
+        width="150"
         :show-overflow-tooltip="true"
       >
         <template slot-scope="scope">
@@ -110,7 +111,6 @@
         align="center"
         prop="instructor"
         :show-overflow-tooltip="true"
-        width="80"
       />
       <el-table-column
         label="课程类型"
@@ -123,14 +123,12 @@
         align="center"
         prop="participantsNumber"
         :show-overflow-tooltip="true"
-        width="70"
       />
       <el-table-column
         label="课程标签"
         align="center"
         prop="labels"
         :show-overflow-tooltip="true"
-        width="70"
       />
       <el-table-column
         label="课程状态"
@@ -143,10 +141,9 @@
         align="center"
         prop="grading"
         :show-overflow-tooltip="true"
-        width="70"
       />
 
-      <el-table-column label="操作" width="280" align="center">
+      <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
           <!-- <el-button type="primary" @click="selectCourse(scope.row.id)"
             >选课</el-button
