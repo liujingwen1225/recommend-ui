@@ -45,16 +45,6 @@ const routes = [
         name: "MyCourse",
         component: () => import("../views/front/MyCourse.vue"),
       },
-      {
-        path: "person",
-        name: "FrontPerson",
-        component: () => import("../views/front/Person"),
-      },
-      {
-        path: "password",
-        name: "FrontPassword",
-        component: () => import("../views/front/Password"),
-      },
     ],
   },
 ];
@@ -87,18 +77,7 @@ export const setRoutes = () => {
         name: "Manage",
         component: () => import("../views/Manage.vue"),
         redirect: "/home",
-        children: [
-          {
-            path: "person",
-            name: "个人信息",
-            component: () => import("../views/Person.vue"),
-          },
-          {
-            path: "password",
-            name: "修改密码",
-            component: () => import("../views/Password.vue"),
-          },
-        ],
+        children: [],
       };
       const menus = JSON.parse(storeMenus);
       menus.forEach((item) => {

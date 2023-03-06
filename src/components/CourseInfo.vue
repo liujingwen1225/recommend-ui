@@ -3,6 +3,17 @@
     <el-form label-width="80px" size="small">
       <el-row :gutter="10">
         <el-col :span="12">
+          <el-form-item label="封面图">
+            <el-image
+              style="width: 100px; height: 100px"
+              :src="form.coverImageUrl"
+              fit="cover"
+            ></el-image>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="12">
           <el-form-item label="课程名称">
             <el-link :href="form.link" target="_blank" type="primary">{{
               form.name
@@ -60,6 +71,13 @@
         <el-col :span="12">
           <el-form-item label="结课时间">
             <span>{{ form.endTime }}</span>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="24">
+          <el-form-item label="概述">
+            <span>{{ form.overview }}</span>
           </el-form-item>
         </el-col>
       </el-row>

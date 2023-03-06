@@ -1,6 +1,10 @@
 <template>
   <div>
-    <el-row :gutter="10" style="margin: 20px 0 60px">
+    <el-row
+      :gutter="10"
+      style="margin: 20px 0 60px"
+      v-if="user.role === 'ROLE_ADMIN'"
+    >
       <el-col :span="6">
         <el-card style="color: #409eff">
           <div><i class="el-icon-user" /> 今年选课用户</div>
@@ -34,7 +38,31 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row>
+
+    <el-form ref="form" label-width="80px" style="margin: 20px 0 0">
+      <el-row :gutter="10">
+        <el-col :span="24">
+          <el-form-item label="课程类型">
+            <el-select
+              @change="fnChartData"
+              multiple
+              v-model="value"
+              clearable
+              placeholder="默认不区分"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item> </el-col
+      ></el-row>
+    </el-form>
+
+    <el-row style="margin: 20px 0 60px">
       <el-col :span="24">
         <div id="hotCoutse" style="width: 100%; height: 450px"></div>
       </el-col>
@@ -58,6 +86,16 @@ export default {
   name: "Home",
   data() {
     return {
+      value: [],
+      options: [
+        {
+          value: "大数据与人工智能",
+          label: "大数据与人工智能",
+        },
+      ],
+      user: localStorage.getItem("user")
+        ? JSON.parse(localStorage.getItem("user"))
+        : {},
       // "今年选课用户")
       userNumber: 0,
       // "课程数量")
@@ -66,39 +104,65 @@ export default {
       teacherNumber: 0,
       //"授课学校数量")
       schoolNumber: 0,
+      hotCoutseChart: null,
+      hotSchoolChart: null,
     };
   },
   mounted() {
+    const hotCoutse = document.getElementById("hotCoutse");
+    this.hotCoutseChart = echarts.init(hotCoutse);
+    const hotSchool = document.getElementById("hotSchool");
+    this.hotSchoolChart = echarts.init(hotSchool);
+    const hotTeather = document.getElementById("hotTeather");
+    this.hotTeatherChart = echarts.init(hotTeather);
+    this.courseTypeList();
     // 页面元素渲染之后再触发
     this.fnChartData();
   },
   methods: {
+    // 课程类型列表
+    courseTypeList() {
+      this.request
+        .get("/course/courseTypeList", {
+          params: {},
+        })
+        .then((res) => {
+          if (res.data) {
+            this.options = res.data.map((item) => ({
+              value: item.type,
+              label: item.type,
+            }));
+          }
+        });
+    },
     fnChartData() {
-      this.request.get("/echarts/chartData").then((res) => {
-        // "今年选课用户")
-        this.userNumber = res.data.userNumber;
-        // "课程数量")
-        this.courseNumber = res.data.courseNumber;
-        //"授课教师数量")
-        this.teacherNumber = res.data.teacherNumber;
-        //"授课学校数量")
-        this.schoolNumber = res.data.schoolNumber;
-        //热门课程
-        this.fnHotCoutse(
-          res.data.popularCourseNameList,
-          res.data.popularCourseNumberList
-        );
-        //热门学校
-        this.fnHotSchool(
-          res.data.popularSchoolNameList,
-          res.data.popularSchoolNumberList
-        );
-        //热门老师
-        this.fnHotTeather(
-          res.data.popularTeacherNameList,
-          res.data.popularTeacherNumberList
-        );
-      });
+      this.request
+        .get("/echarts/chartData?typeList=" + this.value.join(","))
+        .then((res) => {
+          // "今年选课用户")
+          this.userNumber = res.data.userNumber;
+          // "课程数量")
+          this.courseNumber = res.data.courseNumber;
+          //"授课教师数量")
+          this.teacherNumber = res.data.teacherNumber;
+          //"授课学校数量")
+          this.schoolNumber = res.data.schoolNumber;
+          //热门课程
+          this.fnHotCoutse(
+            res.data.popularCourseNameList,
+            res.data.popularCourseNumberList
+          );
+          //热门学校
+          this.fnHotSchool(
+            res.data.popularSchoolNameList,
+            res.data.popularSchoolNumberList
+          );
+          //热门老师
+          this.fnHotTeather(
+            res.data.popularTeacherNameList,
+            res.data.popularTeacherNumberList
+          );
+        });
     },
     /**
      * 热门课程
@@ -106,8 +170,6 @@ export default {
      * @param {*} popularCourseNumberList 人数数组
      */
     fnHotCoutse(popularCourseNameList, popularCourseNumberList) {
-      const hotCoutse = document.getElementById("hotCoutse");
-      const hotCoutseChart = echarts.init(hotCoutse);
       let hotCoutseOption = {
         title: {
           text: "热门课程",
@@ -142,7 +204,7 @@ export default {
           },
         ],
       };
-      hotCoutseChart.setOption(hotCoutseOption);
+      this.hotCoutseChart.setOption(hotCoutseOption);
     },
     /**
      * 热门学校
@@ -150,8 +212,6 @@ export default {
      * @param {*} popularSchoolNumberList 人数数组
      */
     fnHotSchool(popularSchoolNameList, popularSchoolNumberList) {
-      const hotSchool = document.getElementById("hotSchool");
-      const hotSchoolChart = echarts.init(hotSchool);
       let hotSchoolOption = {
         title: {
           text: "热门学校",
@@ -183,7 +243,7 @@ export default {
           },
         ],
       };
-      hotSchoolChart.setOption(hotSchoolOption);
+      this.hotSchoolChart.setOption(hotSchoolOption);
     },
     /**
      * 热门老师
@@ -191,8 +251,6 @@ export default {
      * @param {*} popularTeacherNumberList 人数数组
      */
     fnHotTeather(popularTeacherNameList, popularTeacherNumberList) {
-      const hotTeather = document.getElementById("hotTeather");
-      const hotTeatherChart = echarts.init(hotTeather);
       let hotTeatherOption = {
         title: {
           text: "热门老师",
@@ -224,7 +282,7 @@ export default {
           },
         ],
       };
-      hotTeatherChart.setOption(hotTeatherOption);
+      this.hotTeatherChart.setOption(hotTeatherOption);
     },
   },
 };

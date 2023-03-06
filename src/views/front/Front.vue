@@ -26,6 +26,9 @@
           class="el-menu-demo"
           mode="horizontal"
           router
+          background-color="#ffffff"
+          text-color="#909399"
+          active-text-color="#409EFF"
         >
           <el-menu-item index="/front/home">首页</el-menu-item>
           <el-menu-item index="/front/dashbord">数据可视化</el-menu-item>
@@ -42,7 +45,10 @@
           <el-button @click="$router.push('/register')">注册</el-button>
         </div>
         <div v-else>
-          <el-dropdown style="width: 150px; cursor: pointer; text-align: right">
+          <el-dropdown
+            @command="handleCommand"
+            style="width: 150px; cursor: pointer; text-align: right"
+          >
             <div style="display: inline-block">
               <img
                 :src="user.avatarUrl"
@@ -62,20 +68,31 @@
               slot="dropdown"
               style="width: 100px; text-align: center"
             >
-              <el-dropdown-item style="font-size: 14px; padding: 5px 0">
-                <router-link to="/front/password">修改密码</router-link>
+              <el-dropdown-item
+                style="font-size: 14px; padding: 5px 0"
+                command="passwordOpen"
+              >
+                修改密码
               </el-dropdown-item>
-              <el-dropdown-item style="font-size: 14px; padding: 5px 0">
-                <router-link to="/front/person">个人信息</router-link>
-              </el-dropdown-item>
-              <el-dropdown-item style="font-size: 14px; padding: 5px 0">
-                <span style="text-decoration: none" @click="logout">退出</span>
+              <el-dropdown-item
+                style="font-size: 14px; padding: 5px 0"
+                command="personOpen"
+                >个人信息</el-dropdown-item
+              >
+              <el-dropdown-item
+                style="font-size: 14px; padding: 5px 0"
+                command="logout"
+              >
+                退出
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
       </div>
     </div>
+
+    <PersionInfo ref="persionInfo"></PersionInfo>
+    <PasswordInfo ref="passwordInfo"></PasswordInfo>
 
     <div style="width: 1000px; margin: 0 auto">
       <router-view />
@@ -84,8 +101,11 @@
 </template>
 
 <script>
+import PersionInfo from "./../../components/PersonInfo.vue";
+import PasswordInfo from "./../../components/PasswordInfo.vue";
 export default {
   name: "Front",
+  components: { PersionInfo, PasswordInfo },
   data() {
     return {
       activeIndex: "/front/home",
@@ -105,6 +125,18 @@ export default {
         showClose: true,
         message: "退出成功",
       });
+    },
+    handleCommand(command) {
+      if (command == "logout") {
+        this.logout();
+      }
+      if (command == "passwordOpen") {
+        this.$refs.passwordInfo.dialogFormVisible = true;
+      }
+      if (command == "personOpen") {
+        this.$refs.persionInfo.getUser()
+        this.$refs.persionInfo.dialogFormVisible = true;
+      }
     },
   },
 };

@@ -42,8 +42,8 @@
           >批量删除 <i class="el-icon-remove-outline"></i
         ></el-button>
       </el-popconfirm>
-      <el-upload
-        :action="'http://' + serverIp + ':9090/user/import'"
+      <!-- <el-upload
+        :action="serverIp + '/user/import'"
         :show-file-list="false"
         accept="xlsx"
         :on-success="handleExcelImportSuccess"
@@ -55,7 +55,7 @@
       </el-upload>
       <el-button type="primary" @click="exp" class="ml-5"
         >导出 <i class="el-icon-top"></i
-      ></el-button>
+      ></el-button> -->
     </div>
 
     <el-table

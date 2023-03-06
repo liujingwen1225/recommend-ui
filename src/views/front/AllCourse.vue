@@ -40,7 +40,7 @@
         <el-row :gutter="10">
           <el-col :span="6">
             <el-form-item label="课程类型">
-              <el-select v-model="search.type" placeholder="请选择">
+              <el-select clearable v-model="search.type" placeholder="请选择">
                 <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -63,16 +63,6 @@
       stripe
       :header-cell-class-name="'headerBg'"
     >
-      <el-table-column label="封面图" align="center" prop="coverImageUrl">
-        <template slot-scope="scope">
-          <el-image
-            style="width: 100px; height: 100px"
-            :src="scope.row.coverImageUrl"
-            fit="cover"
-          ></el-image>
-        </template>
-      </el-table-column>
-
       <el-table-column
         label="课程名称"
         align="center"
@@ -130,18 +120,6 @@
         prop="participantsNumber"
         :show-overflow-tooltip="true"
         width="70"
-      />
-      <el-table-column
-        label="开课时间"
-        align="center"
-        prop="startTime"
-        :show-overflow-tooltip="true"
-      />
-      <el-table-column
-        label="结课时间"
-        align="center"
-        prop="endTime"
-        :show-overflow-tooltip="true"
       />
 
       <el-table-column label="操作" width="80" align="center">

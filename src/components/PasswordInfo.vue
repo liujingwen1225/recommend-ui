@@ -1,49 +1,53 @@
 <template>
-  <el-row :gutter="10" justify="center">
-    <el-col :span="24">
-      <el-card style="width: 500px; margin: 0 auto; margin-top: 20px">
-        <el-form
-          label-width="120px"
-          size="small"
-          :model="form"
-          :rules="rules"
-          ref="pass"
-        >
-          <el-form-item label="原密码" prop="password">
-            <el-input
-              v-model="form.password"
-              autocomplete="off"
-              show-password
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="新密码" prop="newPassword">
-            <el-input
-              v-model="form.newPassword"
-              autocomplete="off"
-              show-password
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="确认新密码" prop="confirmPassword">
-            <el-input
-              v-model="form.confirmPassword"
-              autocomplete="off"
-              show-password
-            ></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="save">确 定</el-button>
-          </el-form-item>
-        </el-form>
-      </el-card>
-    </el-col>
-  </el-row>
+  <el-dialog
+    title="修改个人密码"
+    :close-on-press-escape="false"
+    :close-on-click-modal="false"
+    :visible.sync="dialogFormVisible"
+    width="30%"
+  >
+    <el-form
+      label-width="120px"
+      size="small"
+      :model="form"
+      :rules="rules"
+      ref="pass"
+    >
+      <el-form-item label="原密码" prop="password">
+        <el-input
+          v-model="form.password"
+          autocomplete="off"
+          show-password
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="新密码" prop="newPassword">
+        <el-input
+          v-model="form.newPassword"
+          autocomplete="off"
+          show-password
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="确认新密码" prop="confirmPassword">
+        <el-input
+          v-model="form.confirmPassword"
+          autocomplete="off"
+          show-password
+        ></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogFormVisible = false">取 消</el-button>
+      <el-button type="primary" @click="save">确 定</el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
 export default {
-  name: "Password",
+  name: "PasswordInfo",
   data() {
     return {
+      dialogFormVisible: false,
       form: {},
       user: localStorage.getItem("user")
         ? JSON.parse(localStorage.getItem("user"))
@@ -81,6 +85,7 @@ export default {
           }
           this.request.post("/user/password", this.form).then((res) => {
             if (res.code === "200") {
+              this.dialogFormVisible = false;
               this.$message.success({
                 duration: 2000,
                 showClose: true,
