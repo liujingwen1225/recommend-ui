@@ -53,9 +53,9 @@ export default {
 </script>
 
 <style>
-.el-menu-item.is-active {
+/* .el-menu-item.is-active {
   background-color: rgb(38, 52, 69) !important;
-}
+} */
 .el-menu-item:hover {
   background-color: rgb(38, 52, 69) !important;
 }

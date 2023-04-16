@@ -2,12 +2,11 @@
   <div>
     <el-row
       :gutter="10"
-      style="margin: 20px 0 60px"
-      v-if="user.role === 'ROLE_ADMIN'"
-    >
+      style="margin: 20px 0 10px"
+      v-if="user.role === 'ROLE_ADMIN'">
       <el-col :span="6">
         <el-card style="color: #409eff">
-          <div><i class="el-icon-user" /> 今年选课用户</div>
+          <div style="padding: 10px 0; text-align: center; font-weight: bold"><i class="el-icon-user" /> 今年选课用户</div>
           <div style="padding: 10px 0; text-align: center; font-weight: bold">
             {{ userNumber }}
           </div>
@@ -15,7 +14,7 @@
       </el-col>
       <el-col :span="6">
         <el-card style="color: #f56c6c">
-          <div><i class="el-icon-reading" /> 课程数量</div>
+          <div style="padding: 10px 0; text-align: center; font-weight: bold"><i class="el-icon-reading" /> 课程数量</div>
           <div style="padding: 10px 0; text-align: center; font-weight: bold">
             {{ courseNumber }}
           </div>
@@ -23,7 +22,7 @@
       </el-col>
       <el-col :span="6">
         <el-card style="color: #67c23a">
-          <div><i class="el-icon-data-line" /> 授课教师数量</div>
+          <div style="padding: 10px 0; text-align: center; font-weight: bold"><i class="el-icon-data-line" /> 授课教师数量</div>
           <div style="padding: 10px 0; text-align: center; font-weight: bold">
             {{ teacherNumber }}
           </div>
@@ -31,11 +30,62 @@
       </el-col>
       <el-col :span="6">
         <el-card style="color: #e6a23c">
-          <div><i class="el-icon-office-building" /> 授课学校数量</div>
+          <div style="padding: 10px 0; text-align: center; font-weight: bold"><i class="el-icon-office-building" /> 授课学校数量</div>
           <div style="padding: 10px 0; text-align: center; font-weight: bold">
             {{ schoolNumber }}
           </div>
         </el-card>
+      </el-col>
+    </el-row>
+    <el-row
+      :gutter="10"
+      style="margin: 20px 0 20px"
+      v-if="user.role === 'ROLE_ADMIN'">
+      <el-col :span="5">
+        <el-card style="color: #409eff">
+          <div style="padding: 10px 0; text-align: center; font-weight: bold"> 已开课课程数</div>
+          <div style="padding: 10px 0; text-align: center; font-weight: bold">
+            {{ startCourse }}
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="5">
+        <el-card style="color: #f56c6c">
+          <div style="padding: 10px 0; text-align: center; font-weight: bold">即将开始的课程数</div>
+          <div style="padding: 10px 0; text-align: center; font-weight: bold">
+            {{ notStartCourse }}
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="5">
+        <el-card style="color: #67c23a">
+          <div style="padding: 10px 0; text-align: center; font-weight: bold">已结束课程数</div>
+          <div style="padding: 10px 0; text-align: center; font-weight: bold">
+            {{ endCourse }}
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="5">
+        <el-card style="color: #e6a23c">
+          <div style="padding: 10px 0; text-align: center; font-weight: bold"> 国家精品课程数</div>
+          <div style="padding: 10px 0; text-align: center; font-weight: bold">
+            {{ boutiqueCourses }}
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="5">
+        <el-card style="color: #e6723c">
+          <div style="padding: 10px 0; text-align: center; font-weight: bold">大学先修程课数</div>
+          <div style="padding: 10px 0; text-align: center; font-weight: bold">
+            {{ purerCourses }}
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+    
+    <el-row style="margin: 20px 0 30px">
+      <el-col :span="24">
+        <div id="hotName" style="width: 100%; height: 450px"></div>
       </el-col>
     </el-row>
 
@@ -62,18 +112,56 @@
       ></el-row>
     </el-form>
 
-    <el-row style="margin: 20px 0 60px">
+    <el-row style="margin: 20px 0 30px">
       <el-col :span="24">
         <div id="hotCoutse" style="width: 100%; height: 450px"></div>
       </el-col>
     </el-row>
+
     <el-row>
       <el-col :span="12">
         <div id="hotSchool" style="width: 105%; height: 450px"></div>
       </el-col>
 
       <el-col :span="12">
+        <div id="hotSchoolCourse" style="width: 100%; height: 450px"></div>
+      </el-col>
+    </el-row>
+
+    <el-row>
+      <el-col :span="12">
+        <div id="hotTeatherSchool" style="width: 100%; height: 450px"></div>
+      </el-col>
+      <el-col :span="12">
         <div id="hotTeather" style="width: 100%; height: 450px"></div>
+      </el-col>
+    </el-row>
+
+    <el-form ref="form" label-width="80px" style="margin: 20px 0 0">
+      <el-row :gutter="10">
+        <el-col :span="24">
+          <el-form-item label="月度类型">
+            <el-select
+              @change="fnChartData2"
+              v-model="value1"
+              clearable
+              placeholder="老师 or 学校 or 课程"
+            >
+              <el-option
+                v-for="item in optionsday"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item> </el-col
+      ></el-row>
+    </el-form>
+
+    <el-row style="margin: 20px 0 30px">
+      <el-col :span="24">
+        <div id="monthHot" style="width: 100%; height: 450px"></div>
       </el-col>
     </el-row>
   </div>
@@ -81,16 +169,31 @@
 
 <script>
 import * as echarts from "echarts";
-
+import 'echarts-wordcloud'
 export default {
   name: "Home",
   data() {
     return {
       value: [],
+      value1: "",
       options: [
         {
           value: "大数据与人工智能",
           label: "大数据与人工智能",
+        },
+      ],
+      optionsday: [
+        {
+          value: "老师",
+          label: "1",
+        },
+        {
+          value: "学校",
+          label: "2",
+        },
+        {
+          value: "课程",
+          label: "3",
         },
       ],
       user: localStorage.getItem("user")
@@ -104,8 +207,22 @@ export default {
       teacherNumber: 0,
       //"授课学校数量")
       schoolNumber: 0,
+
+      startCourse: 0,
+      notStartCourse: 0,
+      endCourse: 0,
+      boutiqueCourses: 0,
+      purerCourses: 0,
+      wordCould: null,
+
       hotCoutseChart: null,
       hotSchoolChart: null,
+      hotTeatherChart:null,
+      hotSchoolCourseChart: null,
+      hotTeatherSchoolChart: null,
+      monthHotChart: null,
+      chartModels: null,
+      wordChart: null,
     };
   },
   mounted() {
@@ -115,9 +232,23 @@ export default {
     this.hotSchoolChart = echarts.init(hotSchool);
     const hotTeather = document.getElementById("hotTeather");
     this.hotTeatherChart = echarts.init(hotTeather);
+
+    const hotSchoolCourse = document.getElementById("hotSchoolCourse");
+    this.hotSchoolCourseChart = echarts.init(hotSchoolCourse);
+
+    const hotTeatherSchool = document.getElementById("hotTeatherSchool");
+    this.hotTeatherSchoolChart = echarts.init(hotTeatherSchool);
+
+    const monthHot = document.getElementById("monthHot");
+    this.monthHotChart = echarts.init(monthHot);
+
+    const hotName = document.getElementById("hotName");
+    this.wordChart = echarts.init(hotName);
+
     this.courseTypeList();
     // 页面元素渲染之后再触发
     this.fnChartData();
+    this.fnChartData2();
   },
   methods: {
     // 课程类型列表
@@ -147,6 +278,15 @@ export default {
           this.teacherNumber = res.data.teacherNumber;
           //"授课学校数量")
           this.schoolNumber = res.data.schoolNumber;
+
+          this.startCourse = res.data.startCourse;
+          this.notStartCourse = res.data.notStartCourse;
+          this.endCourse = res.data.endCourse;
+          this.boutiqueCourses = res.data.boutiqueCourses;
+          this.purerCourses = res.data.purerCourses;
+
+          this.wordCould = res.data.wordCould;
+          this.chartModels = res.data.hotSchoolZb;
           //热门课程
           this.fnHotCoutse(
             res.data.popularCourseNameList,
@@ -157,12 +297,83 @@ export default {
             res.data.popularSchoolNameList,
             res.data.popularSchoolNumberList
           );
+          //热门学校发布课程数占比
+          this.fnHotSchoolCourse(res.data.hotSchoolZb
+          );
+                    //热门类型所在学校占比
+          this.fnHotTeatherSchool(res.data.hotTypeZb
+          );
+           //词云
+           this.fnwordHot(res.data.wordCould
+          );
           //热门老师
           this.fnHotTeather(
             res.data.popularTeacherNameList,
             res.data.popularTeacherNumberList
           );
         });
+    },
+    
+    fnChartData2() {
+      this.request
+        .get("/echarts/chartYearData?year=" + this.value1)
+        .then((res) => {
+                    //月度热门
+                    this.fnmonthHot(
+                      res.data.popularTeacherNameList,
+                      res.data.popularTeacherNumberList
+          );
+        });
+    },
+    /**
+     * 热门课程
+     * @param {*} popularCourseNameList 名称数组
+     * @param {*} popularCourseNumberList 人数数组
+     */
+     fnwordHot(wordCould) {
+      let hotwordOption = {
+            //设置标题，居中显示
+            title:{
+                text: '热门课程',
+                left:'center',
+             },
+            //数据能够点击
+            tooltip:{
+
+            },
+
+            series:[
+                {
+                    // maskImage:maskResource,
+                    //词的类型
+                    type: 'wordCloud',
+                    drawOutOfBound:true,
+                    shape: 'circle',
+                    //设置字符大小范围
+                    sizeRange:[6,48],
+                    rotationRange:[-25,50],
+                    textStyle: {
+                        normal:{
+                          fontFamily: 'sans-serif',
+                          fontWeight: 'bold',
+                            //生成随机的字体颜色
+                            color:function () {
+                                return 'rgb(' + [
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160),
+                                    Math.round(Math.random() * 160)
+                                ].join(',')+')'
+                            }
+                        }
+                    },
+                    //不要忘记调用数据
+                       data:wordCould
+
+                 }
+            ]
+
+        };
+      this.wordChart.setOption(hotwordOption);
     },
     /**
      * 热门课程
@@ -262,6 +473,93 @@ export default {
       this.hotSchoolChart.setOption(hotSchoolOption);
     },
     /**
+     * 热门学校发布的课程数量占比
+     * @param {*} popularSchoolNameList 名称数组
+     * @param {*} popularSchoolNumberList 人数数组
+     */
+     fnHotSchoolCourse(chartModels) {
+      console.log(chartModels)
+      let hotSchoolCourseOption = {
+  title: {
+    text: '热门学校发布的课程数量占比',
+    // subtext: 'Fake Data',
+    left: 'center'
+  },
+  tooltip: {
+    trigger: 'item'
+  },
+  // legend: {
+  //   orient: 'vertical',
+  //   left: 'bottom'
+  // },
+  series: [
+    {
+      name: 'Access From',
+      type: 'pie',
+      radius: '50%',
+      label: {
+              normal: {
+                show: true,
+                formatter: '{b}:{d}%' //自定义显示格式(b:name, c:value, d:百分比)
+              }
+            },
+      data: chartModels,
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }
+  ]
+};
+      this.hotSchoolCourseChart.setOption(hotSchoolCourseOption);
+    },
+    /**
+     * 热门老师所在的学校占比
+     * @param {*} popularSchoolNameList 名称数组
+     * @param {*} popularSchoolNumberList 人数数组
+     */
+     fnHotTeatherSchool(data) {
+      let hotTeatherSchoolOption = {
+  title: {
+    text: ' 热门类型课程占比',
+    // subtext: 'Fake Data',
+    left: 'center'
+  },
+  tooltip: {
+    trigger: 'item'
+  },
+  // legend: {
+  //   orient: 'vertical',
+  //   left: 'left'
+  // },
+  series: [
+    {
+      name: 'Access From',
+      type: 'pie',
+      radius: '50%',
+      label: {
+              normal: {
+                show: true,
+                formatter: '{b}:{d}%' //自定义显示格式(b:name, c:value, d:百分比)
+              }
+            },
+      data: data,
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)'
+        }
+      }
+    }
+  ]
+};
+      this.hotTeatherSchoolChart.setOption(hotTeatherSchoolOption);
+    },
+    /**
      * 热门老师
      * @param {*} popularTeacherNameList 名称数组
      * @param {*} popularTeacherNumberList 人数数组
@@ -308,8 +606,60 @@ export default {
       };
       this.hotTeatherChart.setOption(hotTeatherOption);
     },
+
+    /**
+     * 热门学校发布的课程数量占比
+     * @param {*} popularSchoolNameList 名称数组
+     * @param {*} popularSchoolNumberList 人数数组
+     */
+     fnmonthHot(data1,data2) {
+      let monthHotOption = {
+        title: {
+          text: "热门学校",
+          subtext: "学生所选课程来自的学校",
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        color: "#8ff9f2",
+        xAxis: {
+          type: "category",
+          data: data2,
+          axisLabel: {
+            // 设置字体的倾斜角度
+            interval: 0,
+            rotate: 30,
+          },
+        },
+        yAxis: {
+          type: "value",
+          axisLabel:{
+            formatter: function (value,index){
+              if (value>1000){
+                value = value /1000 +'k';
+              }
+              return value;
+            }
+          }
+        },
+        series: [
+          {
+            data: data1,
+            type: "bar",
+          },
+        ],
+      };
+      this.monthHotChart.setOption(monthHotOption);
+    },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.el-col-5 {
+  width: 20%;
+}
+</style>
