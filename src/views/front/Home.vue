@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog
-      title="请选择喜欢的课程类型"
+      title="请选择喜欢的类型"
       :visible.sync="dialogVisible"
       width="30%"
       :show-close="false"
@@ -12,7 +12,45 @@
         <el-form ref="form" label-width="120px">
           <el-row :gutter="10">
             <el-col :span="24">
-              <el-form-item label="请选择">
+              <el-form-item label="课程类型">
+                <el-select
+                  multiple
+                  v-model="value"
+                  clearable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item> </el-col
+          ></el-row>
+          <el-row :gutter="10">
+            <el-col :span="24">
+              <el-form-item label="学校">
+                <el-select
+                  multiple
+                  v-model="value"
+                  clearable
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item> </el-col
+          ></el-row>
+          <el-row :gutter="10">
+            <el-col :span="24">
+              <el-form-item label="课程标签">
                 <el-select
                   multiple
                   v-model="value"
@@ -200,6 +238,22 @@ export default {
           duration: 2000,
           showClose: true,
           message: "请选择课程类型！",
+        });
+        return;
+      }
+      if (this.value.length <= 0) {
+        this.$message.warning({
+          duration: 2000,
+          showClose: true,
+          message: "请选择学校！",
+        });
+        return;
+      }
+      if (this.value.length <= 0) {
+        this.$message.warning({
+          duration: 2000,
+          showClose: true,
+          message: "请选择课程标签！",
         });
         return;
       }

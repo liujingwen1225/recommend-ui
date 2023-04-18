@@ -139,8 +139,8 @@
 
     <el-form ref="form" label-width="80px" style="margin: 20px 0 0">
       <el-row :gutter="10">
-        <el-col :span="24">
-          <el-form-item label="月度类型">
+        <el-col :span="15">
+          <el-form-item label="类型">
             <el-select
               @change="fnChartData2"
               v-model="value1"
@@ -155,8 +155,42 @@
               >
               </el-option>
             </el-select>
-          </el-form-item> </el-col
-      ></el-row>
+          </el-form-item> 
+          <el-form-item label="年">
+            <el-select
+              @change="fnChartData2"
+              v-model="value2"
+              clearable
+              placeholder=""
+            >
+              <el-option
+                v-for="item in optionsyear"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item> 
+          <el-form-item label="月">
+            <el-select
+              @change="fnChartData2"
+              v-model="value3"
+              clearable
+              placeholder="4"
+            >
+              <el-option
+                v-for="item in optionsmon"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item> 
+          </el-col
+      >
+    </el-row>
     </el-form>
 
     <el-row style="margin: 20px 0 30px">
@@ -174,8 +208,16 @@ export default {
   name: "Home",
   data() {
     return {
+      yearsModel:null,
+        years:[],
+        monthsModel:null,
+        months:[],
+        daysModel:null,
+
       value: [],
-      value1: "",
+      value1: "1",
+      value2: "2023",
+      value3: "1",
       options: [
         {
           value: "大数据与人工智能",
@@ -184,16 +226,88 @@ export default {
       ],
       optionsday: [
         {
-          value: "老师",
+          value: "1",
+          label: "老师",
+        },
+        {
+          value: "2",
+          label: "学校",
+        },
+        {
+          value: "3",
+          label: "课程",
+        },
+      ],
+      optionsyear: [
+        {
+          value: "2023",
+          label: "2023",
+        },
+        {
+          value: "2022",
+          label: "2022",
+        },
+        {
+          value: "2021",
+          label: "2021",
+        },
+        {
+          value: "2020",
+          label: "2020",
+        },
+        {
+          value: "2019",
+          label: "2019",
+        },
+      ],
+      optionsmon: [
+      {
+          value: "1",
           label: "1",
         },
         {
-          value: "学校",
+          value: "2",
           label: "2",
         },
         {
-          value: "课程",
+          value: "3",
           label: "3",
+        },
+        {
+          value: "4",
+          label: "4",
+        },
+        {
+          value: "5",
+          label: "5",
+        },
+        {
+          value: "6",
+          label: "6",
+        },
+        {
+          value: "7",
+          label: "7",
+        },
+        {
+          value: "8",
+          label: "8",
+        },
+        {
+          value: "9",
+          label: "9",
+        },
+        {
+          value: "10",
+          label: "10",
+        },
+        {
+          value: "11",
+          label: "11",
+        },
+        {
+          value: "12",
+          label: "12",
         },
       ],
       user: localStorage.getItem("user")
@@ -246,9 +360,10 @@ export default {
     this.wordChart = echarts.init(hotName);
 
     this.courseTypeList();
+    this.fnChartData2();
     // 页面元素渲染之后再触发
     this.fnChartData();
-    this.fnChartData2();
+   
   },
   methods: {
     // 课程类型列表
@@ -315,13 +430,15 @@ export default {
     },
     
     fnChartData2() {
+      console.log(this.value1)
       this.request
-        .get("/echarts/chartYearData?year=" + this.value1)
+        .get("/echarts/chartYearData?type=" + this.value1+"&year=" + this.value2+"&month=" + this.value3)
+        // .get("/echarts/chartYearData?year=")
         .then((res) => {
                     //月度热门
                     this.fnmonthHot(
-                      res.data.popularTeacherNameList,
-                      res.data.popularTeacherNumberList
+                      res.data.popularSchoolNameList,
+                      res.data.popularSchoolNumberList
           );
         });
     },
@@ -478,7 +595,6 @@ export default {
      * @param {*} popularSchoolNumberList 人数数组
      */
      fnHotSchoolCourse(chartModels) {
-      console.log(chartModels)
       let hotSchoolCourseOption = {
   title: {
     text: '热门学校发布的课程数量占比',
@@ -615,8 +731,8 @@ export default {
      fnmonthHot(data1,data2) {
       let monthHotOption = {
         title: {
-          text: "热门学校",
-          subtext: "学生所选课程来自的学校",
+          text: this.value2+"年"+this.value3+"月最热门",
+          // subtext: "学生所选课程来自的学校",
         },
         tooltip: {
           trigger: "axis",
@@ -627,7 +743,7 @@ export default {
         color: "#8ff9f2",
         xAxis: {
           type: "category",
-          data: data2,
+          data: data1,
           axisLabel: {
             // 设置字体的倾斜角度
             interval: 0,
@@ -638,16 +754,16 @@ export default {
           type: "value",
           axisLabel:{
             formatter: function (value,index){
-              if (value>1000){
-                value = value /1000 +'k';
-              }
+              // if (value>1000){
+              //   value = value /1000 +'k';
+              // }
               return value;
             }
           }
         },
         series: [
           {
-            data: data1,
+            data: data2,
             type: "bar",
           },
         ],
