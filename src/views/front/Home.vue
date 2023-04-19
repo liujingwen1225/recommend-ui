@@ -34,12 +34,12 @@
               <el-form-item label="学校">
                 <el-select
                   multiple
-                  v-model="value"
+                  v-model="value1"
                   clearable
                   placeholder="请选择"
                 >
                   <el-option
-                    v-for="item in options"
+                    v-for="item in optionsSchool"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -53,12 +53,12 @@
               <el-form-item label="课程标签">
                 <el-select
                   multiple
-                  v-model="value"
+                  v-model="value2"
                   clearable
                   placeholder="请选择"
                 >
                   <el-option
-                    v-for="item in options"
+                    v-for="item in optionsLable"
                     :key="item.value"
                     :label="item.label"
                     :value="item.value"
@@ -187,10 +187,26 @@ export default {
         ? JSON.parse(localStorage.getItem("user"))
         : {},
       value: [],
+      value1: [],
+      value2: [],
       options: [
         {
           value: "大数据与人工智能",
           label: "大数据与人工智能",
+        },
+        optionsSchool: [
+        {
+          value: "22",
+          label: "22",
+        },
+        optionsLable: [
+        {
+          value: "精品",
+          label: "精品",
+        },
+        {
+          value: "先修",
+          label: "先修",
         },
       ],
       // 列表数据
@@ -231,6 +247,22 @@ export default {
           }
         });
     },
+    // 学校列表
+    courseTypeList() {
+      this.request
+        .get("/course/schoolTypeList", {
+          params: {},
+        })
+        .then((res) => {
+          if (res.data) {
+            this.optionsSchool = res.data.map((item) => ({
+              value: item.type,
+              label: item.type,
+            }));
+            this.dialogVisible = true;
+          }
+        });
+    },
     // 确认课程类型
     saveCourseType() {
       if (this.value.length <= 0) {
@@ -241,7 +273,7 @@ export default {
         });
         return;
       }
-      if (this.value.length <= 0) {
+      if (this.value1.length <= 0) {
         this.$message.warning({
           duration: 2000,
           showClose: true,
@@ -249,7 +281,7 @@ export default {
         });
         return;
       }
-      if (this.value.length <= 0) {
+      if (this.value2.length <= 0) {
         this.$message.warning({
           duration: 2000,
           showClose: true,
@@ -262,6 +294,8 @@ export default {
           this.request
             .post("/course/saveCourseType", {
               typeList: this.value.join(","),
+              school: this.value1.join(","),
+              labels: this.value2.join(","),
             })
             .then((res) => {
               if (res.code === "200") {
